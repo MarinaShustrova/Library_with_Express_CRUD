@@ -26,15 +26,26 @@ module.exports = function Header({ user }) {
               </a>
             </li>
             {user ? (
+              <>
               <li className="nav-item">
                 <a
                   className="nav-link"
                   data-type="logout-link"
                   href="/auth/logout"
                 >
-                  Log out
+                  Выйти
                 </a>
               </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-type="addbook-link"
+                  href="/books/add"
+                >
+                  Добавить книгу
+                </a>
+              </li>
+            </>
             ) : (
               <>
                 <li className="nav-item">

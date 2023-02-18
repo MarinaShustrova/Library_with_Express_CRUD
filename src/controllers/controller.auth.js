@@ -36,7 +36,7 @@ const register = async (req, res) => {
     const {
       email, password, group, graduationYear, firstName, lastName,
     } = req.body;
-    if (email && password) {
+    if (email && password && group && graduationYear && firstName && lastName) {
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(password, salt);
       const newUser = await User.create({

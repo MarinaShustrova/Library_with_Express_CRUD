@@ -18,6 +18,7 @@ const bcrypt = require('bcrypt');
 //* подключаем роутеры
 const indexRouter = require('./routes/router.index');
 const authRouter = require('./routes/router.auth');
+const booksRouter = require('./routes/router.books');
 
 //*деструктуризацие выаскиваем модель юзера из бд
 const { User } = require('../db/models');
@@ -80,6 +81,7 @@ app.use(fileUpload());
 //todo использование роутов
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/books', booksRouter);
 
 //todo прослушка порта
 app.listen(PORT, () => {

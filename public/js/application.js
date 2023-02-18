@@ -63,6 +63,7 @@ mainContainer.addEventListener('click', async (event) => {
 
   if (event.target.dataset.type === 'login-button') {
     const loginButton = event.target;
+    const message = loginButton.nextElementSibling;
     const { email, password } = loginButton.closest('form');
 
     const response = await fetch('/auth/login', {
@@ -83,13 +84,8 @@ mainContainer.addEventListener('click', async (event) => {
       mainContainer.innerHTML = html;
       window.history.pushState(null, null, '/');
     }
-    const error = await response.text();
-    const message = loginButton.nextElementSibling;
-    message.innerHTML = error;
-    if (error.includes('isEmail'))
-      message.innerHTML = 'Incorrect email address';
-    if (error.includes('email must be unique'))
-      message.innerHTML = 'Email address already in use';
+    const error = await response.json();
+    message.innerHTML = error.message;
   }
 
   if (event.target.dataset.type === 'logout-link') {
@@ -100,4 +96,41 @@ mainContainer.addEventListener('click', async (event) => {
     mainContainer.innerHTML = html;
     window.history.pushState(null, null, '/');
   }
+
+  if (event.target.dataset.type === 'addbook-link') {
+    await myRedirect(event, '/books/add');
+  }
+
+  if (event.target.dataset.type === 'addbook-button') {
+    const addBookButton = event.target;
+    const { title, description, cover } = addBookButton.closest('form');
+
+    const response = await fetch('/books/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: title.value,
+        description: description.value,
+        cover: cover.value,
+      }),
+    });
+
+    if (response.ok) {
+      const response2 = await fetch('/');
+      const html = await response2.text();
+      mainContainer.innerHTML = '';
+      mainContainer.innerHTML = html;
+      window.history.pushState(null, null, '/');
+    }
+    const error = await response.text();
+    const message = addBookButton.nextElementSibling;
+    message.innerHTML = error;
+  }
+
+
+
+
+
 });
