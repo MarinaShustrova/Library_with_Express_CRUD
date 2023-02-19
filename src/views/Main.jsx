@@ -4,9 +4,7 @@ const Layout = require('./Layout');
 module.exports = function Main({ user }) {
   return (
     <Layout user={user}>
-      <div className="main-container container">
-        <div className="row row-cols-2">Hello world</div>
-      </div>
+      <div className="row row-cols-2">Hello world</div>
     </Layout>
   );
 };

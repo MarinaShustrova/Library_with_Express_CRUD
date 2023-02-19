@@ -129,7 +129,53 @@ mainContainer.addEventListener('click', async (event) => {
     message.innerHTML = error;
   }
 
+  //todo 4 релиз лайки
+  if (event.target.dataset.type === 'like-button') {
+    const likeButton = event.target;
+    const { bookid } = likeButton.dataset;
 
+    const response = await fetch('/books/like', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        bookId: bookid,
+      }),
+    });
+
+    if (response.ok) {
+      likeButton.previousSibling.innerText =
+        Number(likeButton.previousSibling.innerText) + 1;
+      likeButton.dataset.type = 'unlike-button';
+    }
+    likeButton.classList.remove('bi-heart');
+    likeButton.classList.add('bi-heart-fill');
+    return;
+  }
+
+  if (event.target.dataset.type === 'unlike-button') {
+    const likeButton = event.target;
+    const { bookid } = likeButton.dataset;
+
+    const response = await fetch('/books/unlike', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        bookId: bookid,
+      }),
+    });
+
+    if (response.ok) {
+      likeButton.previousSibling.innerText =
+        Number(likeButton.previousSibling.innerText) - 1;
+      likeButton.dataset.type = 'like-button';
+    }
+    likeButton.classList.remove('bi-heart-fill');
+    likeButton.classList.add('bi-heart');
+  }
 
 
 

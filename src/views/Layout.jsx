@@ -12,20 +12,24 @@ module.exports = function Layout({ children, user }) {
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
           rel="stylesheet"
         />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+        />
         <script
           defer
           src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         />
         <script defer src="/js/myRedirect.js" />
         <script defer src="/js/application.js" />
-        <title>Flashcards</title>
+        <title>Library</title>
       </head>
       <body>
         <div className="mainContainer">
           <header className="headerContainer">
             <Header user={user} />
           </header>
-          <main>{children}</main>
+          <main className="container">{children}</main>
         </div>
       </body>
     </html>

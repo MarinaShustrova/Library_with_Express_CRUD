@@ -1,18 +1,18 @@
-//todo переменная окружения
+// todo переменная окружения
 require('dotenv').config();
-//todo подключаем экспресс
+// todo подключаем экспресс
 const express = require('express');
-//todo подключаем пасспорт 
+// todo подключаем пасспорт
 const passport = require('passport');
-//todo подключаем сессии для рег и утентификации
+// todo подключаем сессии для рег и утентификации
 const session = require('express-session');
-//todo подключаем локальную стратегию для аутонтефикации
+// todo подключаем локальную стратегию для аутонтефикации
 const LocalStrategy = require('passport-local').Strategy;
-//todo подключаем стор для хранения сессий 
+// todo подключаем стор для хранения сессий
 const FileStore = require('session-file-store')(session);
-//todo пакет для загрузки файлов
+// todo пакет для загрузки файлов
 const fileUpload = require('express-fileupload');
-//todo пакет дляхэширования паролей
+// todo пакет дляхэширования паролей
 const bcrypt = require('bcrypt');
 
 //* подключаем роутеры
@@ -20,19 +20,22 @@ const indexRouter = require('./routes/router.index');
 const authRouter = require('./routes/router.auth');
 const booksRouter = require('./routes/router.books');
 
-//*деструктуризацие выаскиваем модель юзера из бд
+//* проверка
+const authCheck = require('./middlewares/checkAuth');
+
+//* деструктуризацие выаскиваем модель юзера из бд
 const { User } = require('../db/models');
 
 const PORT = process.env.PORT || 3100;
 const app = express();
 
-//todoподключение статики 
+// todoподключение статики
 app.use(express.static('public'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-//todo конфиг сессий 
+// todo конфиг сессий
 app.use(
   session({
     store: new FileStore(),
@@ -40,10 +43,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false },
-  })
+  }),
 );
 
-//todo локальная стратегия 
+// todo локальная стратегия
 passport.use(
   new LocalStrategy(
     {
@@ -60,16 +63,18 @@ passport.use(
         return done(null, false, { message: 'Incorrect password' });
       }
       const { id, firstName, lastName } = user;
-      return done(null, { id, firstName, lastName, email });
-    }
-  )
+      return done(null, {
+        id, firstName, lastName, email,
+      });
+    },
+  ),
 );
 
-//todo серелиазация юсера
+// todo серелиазация юсера
 passport.serializeUser((user, done) => {
   done(null, user);
 });
-//todo десерелиазация юсера
+// todo десерелиазация юсера
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
@@ -78,12 +83,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(fileUpload());
 
-//todo использование роутов
+// todo использование роутов
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/books', booksRouter);
 
-//todo прослушка порта
+// todo прослушка порта
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
