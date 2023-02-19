@@ -28,6 +28,7 @@ module.exports = function Book({ book, user }) {
           />
         )}
         {isMine && (
+        <>
           <a
             href={`/books/edit/${book.id}`}
             className="btn btn-primary"
@@ -35,6 +36,15 @@ module.exports = function Book({ book, user }) {
           >
             Редактировать
           </a>
+          <a
+            href={`/books/delete/${book.id}`}
+            className="btn btn-primary"
+            data-type="delete-button"
+            data-bookid={book.id}
+          >
+            Удалить
+          </a>
+        </>
         )}
       </div>
     </div>

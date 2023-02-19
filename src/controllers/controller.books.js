@@ -73,6 +73,12 @@ const editBook = async (req, res) => {
   await Book.update({ title, description, cover }, { where: { id: bookId } });
   res.sendStatus(200);
 };
+const deleteBook = async (req, res) => {
+  const { id } = req.params;
+  const book = await Book.findByPk(id);
+  book.destroy();
+  res.sendStatus(200);
+};
 
 module.exports = {
   renderBooksList,
@@ -83,4 +89,5 @@ module.exports = {
   renderMyBooks,
   renderEditBook,
   editBook,
+  deleteBook,
 };

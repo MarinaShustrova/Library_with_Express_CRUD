@@ -12,6 +12,7 @@ const {
   renderMyBooks,
   renderEditBook,
   editBook,
+  deleteBook,
 } = require('../controllers/controller.books');
 
 const router = express.Router();
@@ -23,6 +24,7 @@ router
   .post('/unlike', unlikeBook)
   .get('/my', renderMyBooks)
   .get('/edit/:id', renderEditBook)
-  .post('/edit/:id', editBook);
+  .post('/edit/:id', editBook)
+  .post('/delete/;id', deleteBook);
 
 module.exports = router;

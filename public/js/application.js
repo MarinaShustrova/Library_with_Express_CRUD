@@ -209,4 +209,20 @@ mainContainer.addEventListener('click', async (event) => {
       window.history.pushState(null, null, '/');
     }
   }
+  if (event.target.dataset.type === 'delete-button') {
+    const deleteButton = event.target;
+    const { bookid } = deleteButton.dataset;
+
+    const response = await fetch(`/books/delete/${bookid}`, {
+      method: 'POST',
+    });
+
+    if (response.ok) {
+      const response2 = await fetch('/');
+      const html = await response2.text();
+      mainContainer.innerHTML = '';
+      mainContainer.innerHTML = html;
+      window.history.pushState(null, null, '/');
+    }
+  }
 });
