@@ -41,6 +41,15 @@ module.exports = function Header({ user }) {
                 <li className="nav-item">
                   <a
                     className="nav-link"
+                    data-type="mybooks-link"
+                    href="/books/my"
+                  >
+                    Мои книги
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a
+                    className="nav-link"
                   // data-type="addbook-link"
                   // href="/books/add"
                     data-type="logout-link"

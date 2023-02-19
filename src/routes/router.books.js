@@ -9,6 +9,7 @@ const {
   addBook,
   likeBook,
   unlikeBook,
+  renderMyBooks,
 } = require('../controllers/controller.books');
 
 const router = express.Router();
@@ -17,6 +18,7 @@ router
   .get('/add', renderAddBook)
   .post('/add', addBook)
   .post('/like', likeBook)
-  .post('/unlike', unlikeBook);
+  .post('/unlike', unlikeBook)
+  .get('/my', renderMyBooks);
 
 module.exports = router;

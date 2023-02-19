@@ -17,8 +17,9 @@ mainContainer.addEventListener('click', async (event) => {
     const registerButton = event.target;
     const message = registerButton.nextElementSibling;
 
-    const { email, password, group, graduationYear, firstName, lastName } =
-      registerButton.closest('form');
+    const {
+      email, password, group, graduationYear, firstName, lastName,
+    } = registerButton.closest('form');
 
     const year = Number(graduationYear.value);
     if (Number.isNaN(year)) {
@@ -54,10 +55,8 @@ mainContainer.addEventListener('click', async (event) => {
     } else {
       const error = await response.json();
       message.innerHTML = error.message;
-      if (error.message.includes('isEmail'))
-        message.innerHTML = 'Incorrect email address';
-      if (error.message.includes('email must be unique'))
-        message.innerHTML = 'Email address already in use';
+      if (error.message.includes('isEmail')) { message.innerHTML = 'Incorrect email address'; }
+      if (error.message.includes('email must be unique')) { message.innerHTML = 'Email address already in use'; }
     }
   }
 
@@ -129,7 +128,7 @@ mainContainer.addEventListener('click', async (event) => {
     message.innerHTML = error;
   }
 
-  //todo 4 релиз лайки
+  // todo 4 релиз лайки
   if (event.target.dataset.type === 'like-button') {
     const likeButton = event.target;
     const { bookid } = likeButton.dataset;
@@ -145,8 +144,7 @@ mainContainer.addEventListener('click', async (event) => {
     });
 
     if (response.ok) {
-      likeButton.previousSibling.innerText =
-        Number(likeButton.previousSibling.innerText) + 1;
+      likeButton.previousSibling.innerText = Number(likeButton.previousSibling.innerText) + 1;
       likeButton.dataset.type = 'unlike-button';
     }
     likeButton.classList.remove('bi-heart');
@@ -169,14 +167,15 @@ mainContainer.addEventListener('click', async (event) => {
     });
 
     if (response.ok) {
-      likeButton.previousSibling.innerText =
-        Number(likeButton.previousSibling.innerText) - 1;
+      likeButton.previousSibling.innerText = Number(likeButton.previousSibling.innerText) - 1;
       likeButton.dataset.type = 'like-button';
     }
     likeButton.classList.remove('bi-heart-fill');
     likeButton.classList.add('bi-heart');
   }
 
-
-
+  // todo 5 release
+  if (event.target.dataset.type === 'mybooks-link') {
+    await myRedirect(event, '/books/my');
+  }
 });

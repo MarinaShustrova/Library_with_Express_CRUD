@@ -50,4 +50,13 @@ const unlikeBook = async (req, res) => {
   res.sendStatus(200);
 };
 
-module.exports = { renderBooksList, renderAddBook, addBook, likeBook, unlikeBook };
+const renderMyBooks = async(req, res) => {
+  const { user } = req.session;
+  const books = await Book.findAll({
+    where: { userId: user.id},
+    include: [Like],
+  });
+  renderTemplate(BooksList, { user, books}, res);
+};
+
+module.exports = { renderBooksList, renderAddBook, addBook, likeBook, unlikeBook, renderMyBooks };
