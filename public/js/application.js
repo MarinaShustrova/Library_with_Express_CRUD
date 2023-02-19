@@ -178,4 +178,35 @@ mainContainer.addEventListener('click', async (event) => {
   if (event.target.dataset.type === 'mybooks-link') {
     await myRedirect(event, '/books/my');
   }
+  //todo 6 release
+  if (event.target.dataset.type === 'edit-link') {
+    await myRedirect(event, '/books/edit');
+  }
+
+  if (event.target.dataset.type === 'editbook-button') {
+    const editButton = event.target;
+    const { bookid } = editButton.dataset;
+    const { title, description, cover } = editButton.closest('form');
+
+    const response = await fetch(`/books/edit/${bookid}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        bookId: bookid,
+        title: title.value,
+        description: description.value,
+        cover: cover.value,
+      }),
+    });
+
+    if (response.ok) {
+      const response2 = await fetch('/');
+      const html = await response2.text();
+      mainContainer.innerHTML = '';
+      mainContainer.innerHTML = html;
+      window.history.pushState(null, null, '/');
+    }
+  }
 });

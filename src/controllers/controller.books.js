@@ -4,6 +4,7 @@ const AddBook = require('../views/AddBook');
 
 const { Book, Like } = require('../../db/models');
 const BooksList = require('../views/BooksList');
+const EditBook = require('../views/EditBook');
 
 const renderBooksList = async (req, res) => {
   const { user } = req.session;
@@ -50,13 +51,36 @@ const unlikeBook = async (req, res) => {
   res.sendStatus(200);
 };
 
-const renderMyBooks = async(req, res) => {
+const renderMyBooks = async (req, res) => {
   const { user } = req.session;
   const books = await Book.findAll({
-    where: { userId: user.id},
+    where: { userId: user.id },
     include: [Like],
   });
-  renderTemplate(BooksList, { user, books}, res);
+  renderTemplate(BooksList, { user, books, isMine: 1 }, res);
+};
+const renderEditBook = async (req, res) => {
+  const { user } = req.session;
+  const { id } = req.params;
+  const book = await Book.findByPk(id);
+  renderTemplate(EditBook, { user, book }, res);
 };
 
-module.exports = { renderBooksList, renderAddBook, addBook, likeBook, unlikeBook, renderMyBooks };
+const editBook = async (req, res) => {
+  const {
+    title, description, cover, bookId,
+  } = req.body;
+  await Book.update({ title, description, cover }, { where: { id: bookId } });
+  res.sendStatus(200);
+};
+
+module.exports = {
+  renderBooksList,
+  renderAddBook,
+  addBook,
+  likeBook,
+  unlikeBook,
+  renderMyBooks,
+  renderEditBook,
+  editBook,
+};

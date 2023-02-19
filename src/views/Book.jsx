@@ -1,6 +1,7 @@
 const React = require('react');
 
 module.exports = function Book({ book, user }) {
+  const isMine = book.userId === user.id;
   const likes = book.Likes.length;
   let isLiked;
   book.Likes.forEach((like) => {
@@ -26,9 +27,15 @@ module.exports = function Book({ book, user }) {
             data-bookid={`${book.id}`}
           />
         )}
-        {/* <a href="#" className="btn btn-primary">
-          Go somewhere
-        </a> */}
+        {isMine && (
+          <a
+            href={`/books/edit/${book.id}`}
+            className="btn btn-primary"
+            data-type="edit-link"
+          >
+            Редактировать
+          </a>
+        )}
       </div>
     </div>
   );
