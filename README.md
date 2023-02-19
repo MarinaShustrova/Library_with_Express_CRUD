@@ -1,96 +1,56 @@
-# Express-CRUD-Fetch
-# Express-Node-CRUD-Session
-Here some basic concepts of node-express auth and session
-## init project
-1. npm init -y
-2. npx eslint --init
-3. npx create-gitignore node 
-4. touch .babelrc
-5. npm i dotenv
-6. команда touch создает папку в директории проекта 
-# config for .babelrc
-'{
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "targets": { "node": "14" },
-          "modules": false
-        }
-      ],
-      "@babel/preset-react"
-    ]
-  }'
-  7. .env_example 
-PORT=3000
-DEV_DB_URL=postgres://admindb:admindb@localhost:5432/dbName
- TEST_DB_URL=postgres://username_testdb:password@localhost:5432/dbName
-PROD_DB_URL=postgres://username:password@server.com/dbName
-8. !!! не забыть создать файл .env_example !!!
-9. npm install express
-10. npm i react react-dom @babel/core @babel/preset-env @babel/preset-react @babel/register
-11. npm i express morgan
-12. npm install --save path
-13. require('dotenv').config(); в файлк app.js
-14. npm i express-session
-15.  пишем middleware в файле app.js
-  app.use(express.static(path.resolve('public')));
-  app.use(morgan('dev'));
-  app.use(express.urlencoded({extended: true}));
-  app.use(express.json());
+### Библиотека
+Введение
+ Пользователи  приложения могут регистрироваться на сайте и добавлять книги, которые они прочитали или хотят прочитать. К этим книгам можно иставить лайки.
 
-  ### ATTETION  сначала прописать файл sequelizerc как у ромы потом дб инит! иначе errors
-  16. npm i sequelize sequelize-cli pg pg-hstore 
-  
-  ** config .sequelize rc !! обратить внимание папка db находится в src 
-module.exports = {
-  'config': path.resolve('src', 'db', 'database.json'),
-  'models-path': path.resolve('src', 'db', 'models'),
-  'seeders-path': path.resolve('src', 'db', 'seeders'),
-  'migrations-path': path.resolve('src', 'db', 'migrations')
-};
+
+
+Pre-release: Setup
+Убедись, что в твоем проекте есть файл .gitignore, package.json и установлены все необходимые библиотеки. Создай базу данных. Проинициализируй eslint.
+
+Release 0: User Registration
+Первое, что нужно сделать - это регистрация пользователей. Не забудь про шифрование паролей. Ты можешь использовать для этого sha256 или более продвинутую библиотеку bcrypt. Называй свои routings в стиле REST. Тебе поможет вот эта статья на Хабре: REST API Best Practices
+
+Добавь в шапку сайта ссылки на регистрацию и на домашнюю страницу. Реализуй регистрацию. У каждого пользователя обязательными полями будут имя, email и пароль. Поскольку, это приложение для студентов и выпускников Эльбруса, добавьте возможность указать при регистрации название группы и год выпуска. email должен быть уникальным у каждого пользователя. При регистрации пользователь выбирает в выпадающем меню свою группу: Орлы, Совы, Пчёлы, Медведи, Еноты, Лисы, Волки, Бобры или Ежи. Год выпуска можно выбрать в диапазоне от 2018 до 2077. Если регистрация не удалась - пользователь должен быть оповещен об этом. Если она прошла успешно - пользователь автоматически входит в систему и перенаправляется на домашнюю страницу. Ссылка на регистрацию в меню заменяется кнопкой logout.
+
+
+Release 1: Login/Logout
+Добавь в шапку сайта кнопку "login", ведущую на соответствующую страницу. Не забудь обрабатывать ошибки: если у пользователя не получается залогиниться - ему нужно знать причину. При успешном входе - вместо кнопки "login" должна появляться "logout". При нажатии на logout пользователь выходит из системы и оказывается на домашней странице. На данном этапе домашняя страница может быть пустой, позже на ней будут отображаться все книги, добавленные пользователями. login/logout animation
+Рисунок 2. Login, logout.
+
+Release 2: Add Books
+Теперь сделай функционал для авторизованных пользователей, позволяющий добавлять книги на сайт. Создай страницу с формой добавления книги, обработчик (handler) на сервере и соответствующую модель в Sequelize. У каждой книги обязательно должны быть название, описание, обложка(можно в виде ссылки на картинку). В случае успешного сохранения пользователь перенаправляется на главную страницу. Добавь ссылку на добавление книги в навигационное меню в шапке сайта.
+
+Совет: в качестве обложки для книги можно использовать заглушку с picsum.photos или placeholder.com
+
+Release 3: List Books
+Сделай так, чтобы на главной странице были видны все добавленные книги с фотографиями и названием.
+
+Release 4: I love this book!
+Добавь кнопку "like" и счетчик лайков к каждой книге на странице с книгами. После нажатия на эту кнопку количество лайков этой книги должно увеличиться на 1. Эта функция должна быть доступна только авторизованным пользователям. Проследи за тем, чтобы пользователи не могли лайкать одну и ту же книгу больше одного раза. listing an item animation
+Рисунок 4. Все книги всех пользователей
+
+Release 5: Where is my books?
+Добавь кнопку "my books" к навигационному меню в шапке сайта. Эта кнопка доступна только авторизованным пользователям и ведет на страницу с книгами, которые добавил этот пользователь.
+
  
-17. npx sequelize init
-18. npx sequelize db:create
-const path = require('path');
-require('dotenv').config();
+Release 6: Updating Books
+Возможно, пользователи захотят переименовать свои книги или изменить их описание. Добавь в свой проект функциональность, которая позволит это делать. Добавь на странице с книгами ссылки edit к каждому элементу. По нажатию на эту ссылку должна открываться форма редактирования всех свойств выбранной книги:
 
-19. npm i bcrypt
-20. npm i session-file-store
-21. npm install --save-dev nodemon
-22. config for cookies
-const sessionConfig = {
-  name: 'sid', // название куки
-  store: new FileStore({}), // подключаем БД для храненя куков
-  secret: process.env.COOKIE_SECRET, // ключ для шифрования cookies // require('crypto').randomBytes(10).toString('hex')
-  resave: false,                     // Если true,  пересохраняет сессию, даже если она не поменялась
-  saveUninitialized: false, // Если false, куки появляются только при установке req.session
-  cookie: {
-    secure: process.env.NODE_ENV === 'production', // В продакшне нужно "secure: true" для работы через протокол HTTPS
-    maxAge: 1000 * 60 * 60 * 24 * 10, // время жизни cookies, ms (10 дней)
-  },
-}
-// записывает в переменную req.session.user данные из прилетевшей куки, если такаяже была найдена в базе данных для кук.
-//  если куки нету или она не найдена в session storage, то req.session.user будет равно unfefined
-app.use(session(sessionConfig));
 
-23. for package.json
-"main": "src/index.js", !!!!!!!!
-///
-  "scripts": {
-    "start": "node src/index.js",
-    "prod": "NODE_ENV=production node src/index.js",
-    "dev": "nodemon src/index.js --ignore sessions --ext js,jsx",
-    "debug": "node --no-lazy --inspect-brk src/index.js",
-    "db-up": "npx sequelize db:create; npx sequelize db:migrate; npx sequelize db:seed:all;",
-    "db-down": "npx sequelize db:migrate:undo:all; npx sequelize db:drop;"
-  },
-///
-    "prettier": {
-    "singleQuote": true
-  }
+Release 7: Deleting Books
+Если книга разочаровала читателя, он захочет ее удалить. Добавь кнопку delete к каждой книге. После удаления книги она должна исчезать со страницы с книгами и из раздела "My Books". editing an item
+Рисунок 7. Книга с кнопками удиления и редактирования
 
-  24. npx sequelize db:create 
-  25. команда на создание модели юсера 
-  npx sequelize model:create --name User --attributes name:string,password:string,email:string 
-  
+Не забывай, что кнопки "edit" и "delete" должны быть только у авторизованных пользователей, при чем только на собственных книгах. Юзеры не могут отредактировать или удалить не свою книгу.
+
+Release 8: Can I get this book?
+Сделай так, чтобы при добавлении книги на сайт, можно было залить файл с книгой на сервер. Добавь нужное поле в форму добавления книги, подготовь схему и модель соответствующим образом, измени hbs-шаблон книги так, чтобы в нем была кнопка "Download", повзволяющая скачивать книгу с сервера.
+
+Примечание: Возможно, для загрузки книги на сервер тебе понадобится библиотека express-fileupload или Multer. Кнопка "Download" - не что иное, как прямая ссылка на книгу, лежающую на сервере в общудоступной директории
+
+Release 9: Comments
+Авторизованные пользовтели могут оставлять комментарии под книгами. Для того чтобы перейти к комментариям, книга должна быть кликабельна и при клике на нее пользователь попадает на страницу книги с фотографией, описанием и комментариями. Так же на этой странице должна быть форма, с помощью которой пользователь может оставить комментарий. Желательно, чтобы комментарий добавлялся без перезагрузки страницы.
+
+
+
+
